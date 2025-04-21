@@ -2,16 +2,13 @@ package com.example.backend_store.entity;
 
 import jakarta.persistence.*;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Builder
 @RequiredArgsConstructor
 @Table(name = "users")
 @Entity
