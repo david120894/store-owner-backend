@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
- @CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*")
 public class AuthController {
     @Autowired
     private UserService userService;
     @Autowired
     private JwtGenerator jwtGenerator;
-    // Add your authentication endpoints here
-    // For example, login and register methods
+
     @PostMapping("/login")
     public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(userService.login(loginDto));
@@ -35,16 +34,12 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refreshToke(Authentication authentication){
+    public ResponseEntity<?> refreshToke(Authentication authentication) {
 
         String token = jwtGenerator.refreshToken(authentication);
 
-        JwtResponseDto jwtRefresh = new JwtResponseDto(token);
+        JwtResponseDto jwtRefresh = new JwtResponseDto();
+        jwtRefresh.setToken(token);
         return new ResponseEntity<JwtResponseDto>(jwtRefresh, HttpStatus.OK);
     }
-
-//    @GetMapping("/logued")
-//    public ResponseEntity<UserDto> getLoguedUser(@RequestHeader HttpHeaders headers){
-//        return new ResponseEntity<>(userService.getLoguedUser(headers), HttpStatus.OK);
-//    }
 }

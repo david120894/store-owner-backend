@@ -1,7 +1,9 @@
 package com.example.backend_store.service;
 
+import com.example.backend_store.entity.Role;
+
 public interface RoleService {
-    void createRole(String roleName);
+    Role createRole(String roleName);
 
     void deleteRole(String roleName);
 

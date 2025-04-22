@@ -6,12 +6,4 @@ public class JwtAuthenticationException extends AuthenticationCredentialsNotFoun
     public JwtAuthenticationException(String message) {
         super(message);
     }
-
-    public JwtAuthenticationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public JwtAuthenticationException(Throwable cause) {
-        super(String.valueOf(cause));
-    }
 }

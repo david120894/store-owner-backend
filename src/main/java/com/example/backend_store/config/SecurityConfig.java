@@ -1,6 +1,7 @@
 package com.example.backend_store.config;
 
 
+
 import com.example.backend_store.security.JwtAuthEntryPoint;
 import com.example.backend_store.security.JwtAuthenticationFilter;
 import com.example.backend_store.service.imple.UserDetailsServiceImpl;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 @EnableWebSecurity
@@ -52,6 +54,8 @@ public class SecurityConfig {
                         authorization -> authorization
                                 .requestMatchers("/api/login").permitAll()
                                 .requestMatchers("/api/register").permitAll()
+                                .requestMatchers("/api/refresh-token").permitAll()
+                                .requestMatchers("/api/roles").permitAll()
                                 .requestMatchers("/admin").hasAnyAuthority("ADMIN")
                                 .requestMatchers("/user").hasAnyAuthority("USER")
                                 .anyRequest().authenticated()

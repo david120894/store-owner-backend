@@ -17,14 +17,15 @@ import java.security.Key;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 @Component
 public class JwtGenerator {
-    public static final Logger logger = LoggerFactory.getLogger(JwtAuthEntryPoint.class);
+    public static final Logger logger = LoggerFactory.getLogger(JwtGenerator.class);
 
-//    @Value("${security.jwt.secret-key}")
-    public final String secret = "J3OTCO6mEq2fQ7yswbaz0+98y7R61LEaeY+7EnKPUto=";
+    @Value("${security.jwt.secret-key}")
+    private String secret;
 
     public String generateToken(Authentication authentication) {
 
@@ -82,19 +83,20 @@ public class JwtGenerator {
         try {
             UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
             List<String> roles = userPrincipal.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority).toList();
-            Date now = new Date();
-            Date expiryDate = new Date(now.getTime() + SecurityConstants.JWT_AUTHENTICATION_EXPIRES_IN); // 1 day
+                    .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+
+            Date currentDate = new Date();
+            Date expireDate = new Date(currentDate.getTime() + SecurityConstants.JWT_AUTHENTICATION_EXPIRES_IN);
             return Jwts.builder()
                     .subject(userPrincipal.getUsername())
                     .claim("roles", roles)
-                    .issuedAt(now)
-                    .expiration(expiryDate)
+                    .issuedAt(currentDate)
+                    .expiration(expireDate)
                     .signWith(getKey())
                     .compact();
+
         } catch (Exception e) {
-            logger.error("Error refreshing token: " + e.getMessage());
+            throw new RuntimeException("Error internal server");
         }
-        return null;
     }
 }

@@ -4,13 +4,9 @@ import java.io.Serial;
 
 public class ConflictException extends RuntimeException {
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1;
 
-    public ConflictException(String message) {
+    public ConflictException(String message){
         super(message);
-    }
-
-    public ConflictException(String message, Throwable cause) {
-        super(message, cause);
     }
 }

@@ -21,7 +21,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import javax.naming.ConfigurationException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Override
-    public UserDto register(RegisterDto user) {
+    public void register(RegisterDto user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new ConflictException("Username already exists");
         } else {
@@ -59,7 +58,6 @@ public class UserServiceImpl implements UserService {
             userDto.setPassword(newUser.getPassword());
             userDto.setRoles(newUser.getRoles());
 
-            return userDto;
         }
     }
 
@@ -74,7 +72,9 @@ public class UserServiceImpl implements UserService {
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtGenerator.generateToken(authentication);
-            return new JwtResponseDto(jwt);
+            JwtResponseDto jwtResponseDto = new JwtResponseDto();
+            jwtResponseDto.setToken(jwt);
+            return jwtResponseDto;
 
         } catch (AuthenticationException e) {
             throw new JwtAuthenticationException("Invalid username or password");
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getLoguedUser(HttpHeaders headers) {
+    public UserDto getLogoutUser(HttpHeaders headers) {
         return null;
     }
 }
