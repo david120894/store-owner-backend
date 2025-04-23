@@ -3,7 +3,6 @@ package com.example.backend_store.entity;
 import jakarta.persistence.*;
 
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
