@@ -95,6 +95,7 @@ public class UserServiceImpl implements UserService {
         } else {
             return users.stream().map(user -> {
                 UserDto userDto = new UserDto();
+                userDto.setId(user.getId().longValue());
                 userDto.setUsername(user.getUsername());
                 userDto.setPassword(user.getPassword());
                 userDto.setRoles(user.getRoles());
