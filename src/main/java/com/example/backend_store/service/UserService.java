@@ -1,0 +1,16 @@
+package com.example.backend_store.service;
+
+import com.example.backend_store.dto.JwtResponseDto;
+import com.example.backend_store.dto.LoginDto;
+import com.example.backend_store.dto.RegisterDto;
+import com.example.backend_store.dto.UserDto;
+import org.springframework.http.HttpHeaders;
+
+
+public interface UserService {
+    public void register(RegisterDto registerDto);
+
+    public JwtResponseDto login(LoginDto loginDto);
+
+    UserDto getLogoutUser(HttpHeaders headers);
+}
