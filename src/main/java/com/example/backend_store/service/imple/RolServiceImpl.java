@@ -3,7 +3,11 @@ package com.example.backend_store.service.imple;
 import com.example.backend_store.entity.Role;
 import com.example.backend_store.repository.RolRepository;
 import com.example.backend_store.service.RoleService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authorization.method.HandleAuthorizationDenied;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +15,7 @@ public class RolServiceImpl implements RoleService {
     @Autowired
     private RolRepository rolRepository;
 
+    
     @Override
     public Role createRole(String roleName) {
         if (roleName.isEmpty()) {
@@ -40,6 +45,16 @@ public class RolServiceImpl implements RoleService {
             throw new IllegalArgumentException("Role name cannot be null");
         } else {
             return rolRepository.findByName(roleName).isPresent();
+        }
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        List<Role> roles = rolRepository.findAll();
+        if (roles.isEmpty()) {
+            throw new IllegalAccessError("No roles found");
+        } else {
+            return roles;
         }
     }
 }

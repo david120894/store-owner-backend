@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -84,5 +85,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getLogoutUser(HttpHeaders headers) {
         return null;
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            throw new NotFoundException("No users found");
+        } else {
+            return users.stream().map(user -> {
+                UserDto userDto = new UserDto();
+                userDto.setUsername(user.getUsername());
+                userDto.setPassword(user.getPassword());
+                userDto.setRoles(user.getRoles());
+                return userDto;
+            }).toList();
+        }
     }
 }

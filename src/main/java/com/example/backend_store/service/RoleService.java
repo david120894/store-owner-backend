@@ -1,11 +1,14 @@
 package com.example.backend_store.service;
 
+import java.util.List;
+
 import com.example.backend_store.entity.Role;
 
 public interface RoleService {
-    Role createRole(String roleName);
+    List<Role> getAllRoles();
+    Role createRole(String name);
 
-    void deleteRole(String roleName);
+    void deleteRole(String name);
 
     void updateRole(String oldRoleName, String newRoleName);
 

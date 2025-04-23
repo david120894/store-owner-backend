@@ -4,7 +4,6 @@ import com.example.backend_store.dto.JwtResponseDto;
 import com.example.backend_store.dto.LoginDto;
 import com.example.backend_store.dto.RegisterDto;
 import com.example.backend_store.security.JwtGenerator;
-import com.example.backend_store.service.RoleService;
 import com.example.backend_store.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
 public class AuthController {
     @Autowired
     private UserService userService;
