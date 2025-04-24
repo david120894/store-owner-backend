@@ -4,6 +4,7 @@ import com.example.backend_store.auth.dto.JwtResponseDto;
 import com.example.backend_store.auth.dto.LoginDto;
 import com.example.backend_store.auth.dto.RegisterDto;
 import com.example.backend_store.auth.dto.UserDto;
+import com.example.backend_store.auth.dto.UserResponseDTO;
 import com.example.backend_store.auth.entity.Role;
 import com.example.backend_store.auth.entity.User;
 import com.example.backend_store.auth.exceptions.ConflictException;
@@ -13,6 +14,9 @@ import com.example.backend_store.auth.repository.RolRepository;
 import com.example.backend_store.auth.repository.UserRepository;
 import com.example.backend_store.auth.security.JwtGenerator;
 import com.example.backend_store.auth.service.UserService;
+import com.example.backend_store.person.dto.PersonDTO;
+import com.example.backend_store.person.entity.Person;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,9 +25,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,27 +43,33 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Override
-    public void register(RegisterDto user) {
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+    public User register(UserDto user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
             throw new ConflictException("Username already exists");
-        } else {
-            User newUser = new User();
-            newUser.setUsername(user.getUsername());
-            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-
-            Role role = rolRepository.findByName("ADMIN")
-                    .orElseThrow(() -> new NotFoundException("Role not found"));
-            Set<Role> roles = new HashSet<>();
-            roles.add(role);
-            newUser.setRoles(roles);
-            userRepository.save(newUser);
-
-            UserDto userDto = new UserDto();
-            userDto.setUsername(newUser.getUsername());
-            userDto.setPassword(newUser.getPassword());
-            userDto.setRoles(newUser.getRoles());
-
         }
+        Set<Role> roles = user.getRoles().stream()
+                .map(roleName -> rolRepository.findByName(roleName)
+                        .orElseThrow(() -> new NotFoundException("Role not found: " + roleName)))
+                .collect(Collectors.toSet());
+
+
+        PersonDTO personDTO = user.getPerson();
+        Person person = new Person();
+        person.setFirstName(personDTO.getFirstName());
+        person.setLastName(personDTO.getLastName());
+        person.setEmail(personDTO.getEmail());
+        person.setPhone(personDTO.getPhone());
+        person.setAddress(personDTO.getAddress());
+        person.setCity(personDTO.getCity());
+        person.setDni(personDTO.getDni());
+
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setRoles(roles);
+        newUser.setPerson(person);
+
+        return userRepository.save(newUser);   
     }
 
     @Override
@@ -88,17 +98,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         if (users.isEmpty()) {
             throw new NotFoundException("No users found");
         } else {
             return users.stream().map(user -> {
-                UserDto userDto = new UserDto();
+                UserResponseDTO userDto = new UserResponseDTO();
                 userDto.setId(user.getId());
                 userDto.setUsername(user.getUsername());
-                userDto.setPassword(user.getPassword());
-                userDto.setRoles(user.getRoles());
+                userDto.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+                PersonDTO personDto = new PersonDTO();
+                personDto.setId(user.getPerson().getId());
+                personDto.setFirstName(user.getPerson().getFirstName());
+                personDto.setLastName(user.getPerson().getLastName());
+                personDto.setEmail(user.getPerson().getEmail());
+                personDto.setPhone(user.getPerson().getPhone());
+                personDto.setAddress(user.getPerson().getAddress());
+                personDto.setCity(user.getPerson().getCity());
+                personDto.setDni(user.getPerson().getDni());
+                userDto.setPerson(personDto);
                 return userDto;
             }).toList();
         }
