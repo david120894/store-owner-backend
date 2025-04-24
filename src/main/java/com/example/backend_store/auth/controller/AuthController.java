@@ -1,10 +1,18 @@
 package com.example.backend_store.auth.controller;
 
+import com.example.backend_store.auth.dto.ApiResponse;
 import com.example.backend_store.auth.dto.JwtResponseDto;
 import com.example.backend_store.auth.dto.LoginDto;
-import com.example.backend_store.auth.dto.RegisterDto;
+import com.example.backend_store.auth.dto.UserDto;
+import com.example.backend_store.auth.dto.UserResponseDTO;
+import com.example.backend_store.auth.entity.Role;
+import com.example.backend_store.auth.entity.User;
 import com.example.backend_store.auth.security.JwtGenerator;
 import com.example.backend_store.auth.service.UserService;
+import com.example.backend_store.person.dto.PersonDTO;
+
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,10 +33,28 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-        userService.register(registerDto);
+    public ResponseEntity<ApiResponse<UserResponseDTO>> register(@RequestBody UserDto registerDto) {
+        User user = userService.register(registerDto);
+        UserResponseDTO userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setId(user.getId());
+        userResponseDTO.setUsername(user.getUsername());
+        PersonDTO personDTO = new PersonDTO();
+        personDTO.setId(user.getPerson().getId());
+        personDTO.setFirstName(user.getPerson().getFirstName());
+        personDTO.setLastName(user.getPerson().getLastName());
+        personDTO.setEmail(user.getPerson().getEmail());
+        personDTO.setPhone(user.getPerson().getPhone());
+        personDTO.setAddress(user.getPerson().getAddress());
+        personDTO.setCity(user.getPerson().getCity());
+        userResponseDTO.setPerson(personDTO);
 
-        return new ResponseEntity<>("User register success!", HttpStatus.CREATED);
+        userResponseDTO.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())
+);
+        return ResponseEntity.ok(new ApiResponse<>(
+                "User registered successfully",
+                HttpStatus.OK.value(),
+                userResponseDTO
+        ));
     }
 
     @PostMapping("/refresh-token")

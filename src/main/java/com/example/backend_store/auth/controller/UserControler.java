@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend_store.auth.dto.UserDto;
+import com.example.backend_store.auth.dto.UserResponseDTO;
 import com.example.backend_store.auth.service.UserService;
 
 @RestController
@@ -17,8 +17,8 @@ public class UserControler {
     @Autowired
     private UserService userService;
     @GetMapping("/users")
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> users = userService.getAllUsers();
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        List<UserResponseDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
     

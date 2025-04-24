@@ -1,7 +1,6 @@
 package com.example.backend_store.person.entity;
 
 import com.example.backend_store.auth.entity.User;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -15,9 +14,10 @@ public class Person {
     private String firstName;
     private String lastName;
     private String email;
+    private String dni;
     private String phone;
     private String address;
     private String city;
-    @OneToOne(mappedBy="person",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy="person")
     private User user;
 }
