@@ -2,7 +2,6 @@ package com.example.backend_store.auth.service.impl;
 
 import com.example.backend_store.auth.dto.JwtResponseDto;
 import com.example.backend_store.auth.dto.LoginDto;
-import com.example.backend_store.auth.dto.RegisterDto;
 import com.example.backend_store.auth.dto.UserDto;
 import com.example.backend_store.auth.dto.UserResponseDTO;
 import com.example.backend_store.auth.entity.Role;
@@ -81,10 +80,28 @@ public class UserServiceImpl implements UserService {
                             loginDto.getPassword()
                     )
             );
+            User user = userRepository.findByUsername(loginDto.getUsername())
+                    .orElseThrow(() -> new NotFoundException("User not found"));
+            UserResponseDTO userResponseDTO = new UserResponseDTO();
+            userResponseDTO.setId(user.getId());
+            userResponseDTO.setUsername(user.getUsername());
+            userResponseDTO.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
+            PersonDTO personDTO = new PersonDTO();
+            personDTO.setId(user.getPerson().getId());
+            personDTO.setFirstName(user.getPerson().getFirstName());
+            personDTO.setLastName(user.getPerson().getLastName());
+            personDTO.setEmail(user.getPerson().getEmail());
+            personDTO.setPhone(user.getPerson().getPhone());
+            personDTO.setAddress(user.getPerson().getAddress());
+            personDTO.setCity(user.getPerson().getCity());
+            personDTO.setDni(user.getPerson().getDni());
+            userResponseDTO.setPerson(personDTO);
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtGenerator.generateToken(authentication);
             JwtResponseDto jwtResponseDto = new JwtResponseDto();
             jwtResponseDto.setToken(jwt);
+            jwtResponseDto.setUser(userResponseDTO);
             return jwtResponseDto;
 
         } catch (AuthenticationException e) {
