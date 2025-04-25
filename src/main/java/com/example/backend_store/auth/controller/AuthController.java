@@ -28,8 +28,12 @@ public class AuthController {
     private JwtGenerator jwtGenerator;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto) {
-        return ResponseEntity.ok(userService.login(loginDto));
+    public ResponseEntity<ApiResponse<JwtResponseDto>> login(@RequestBody LoginDto loginDto) {
+        return ResponseEntity.ok(new ApiResponse<>(
+                "Login successful",
+                HttpStatus.OK.value(),
+                userService.login(loginDto)
+        ));
     }
 
     @PostMapping("/register")
