@@ -3,6 +3,7 @@ package com.example.backend_store.product.store.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.backend_store.product.category.entity.Category;
 import com.example.backend_store.product.product.entity.Product;
 
 import jakarta.persistence.CascadeType;
@@ -22,8 +23,9 @@ public class Store {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String category;
     @OneToMany(mappedBy = "store",
-            cascade = CascadeType.ALL,orphanRemoval = true)
-    private Set<Product> products = new HashSet<>();
+    cascade = CascadeType.ALL)
+    private Set<Category> categories = new HashSet<>();
+
+
 }

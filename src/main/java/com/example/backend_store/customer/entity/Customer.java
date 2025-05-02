@@ -1,4 +1,4 @@
-package com.example.backend_store.product.customer.entity;
+package com.example.backend_store.customer.entity;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -3,6 +3,7 @@ package com.example.backend_store.product.product.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.example.backend_store.product.category.entity.Category;
 import com.example.backend_store.product.presentations.entity.Presentation;
 import com.example.backend_store.product.store.entity.Store;
 
@@ -26,12 +27,12 @@ public class Product {
     private Long id;
     private String name;
     private String code;
-    @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store store;
     @OneToMany(mappedBy = "product", 
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private Set<Presentation>  presentations= new HashSet<>();
+    @ManyToOne()
+    @JoinColumn(name = "category_id")
+    private Category productCategory;
     
 }

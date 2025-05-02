@@ -2,6 +2,7 @@ package com.example.backend_store.product.purchase.entity;
 
 import com.example.backend_store.product.presentations.entity.Presentation;
 
+import com.example.backend_store.seller.entity.Seller;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +30,9 @@ public class PurchaseDetail {
     @ManyToOne()
     @JoinColumn(name = "presentation_id")
     private Presentation presentation;
+    @ManyToOne()
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
 
 
 }
