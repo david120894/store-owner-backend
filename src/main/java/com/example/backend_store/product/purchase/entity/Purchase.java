@@ -4,11 +4,9 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.example.backend_store.product.customer.entity.Customer;
-import com.example.backend_store.product.presentations.entity.Presentation;
+import com.example.backend_store.customer.entity.Customer;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
