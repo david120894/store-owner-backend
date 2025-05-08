@@ -86,15 +86,16 @@ public class UserServiceImpl implements UserService {
             userResponseDTO.setId(user.getId());
             userResponseDTO.setUsername(user.getUsername());
             userResponseDTO.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
-            PersonDTO personDTO = new PersonDTO();
-            personDTO.setId(user.getPerson().getId());
-            personDTO.setFirstName(user.getPerson().getFirstName());
-            personDTO.setLastName(user.getPerson().getLastName());
-            personDTO.setEmail(user.getPerson().getEmail());
-            personDTO.setPhone(user.getPerson().getPhone());
-            personDTO.setAddress(user.getPerson().getAddress());
-            personDTO.setCity(user.getPerson().getCity());
-            personDTO.setDni(user.getPerson().getDni());
+            PersonDTO personDTO = new PersonDTO(
+                    user.getPerson().getId(),
+                    user.getPerson().getFirstName(),
+                    user.getPerson().getLastName(),
+                    user.getPerson().getDni(),
+                    user.getPerson().getEmail(),
+                    user.getPerson().getPhone(),
+                    user.getPerson().getAddress(),
+                    user.getPerson().getCity()
+            );
             userResponseDTO.setPerson(personDTO);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -125,15 +126,16 @@ public class UserServiceImpl implements UserService {
                 userDto.setId(user.getId());
                 userDto.setUsername(user.getUsername());
                 userDto.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet()));
-                PersonDTO personDto = new PersonDTO();
-                personDto.setId(user.getPerson().getId());
-                personDto.setFirstName(user.getPerson().getFirstName());
-                personDto.setLastName(user.getPerson().getLastName());
-                personDto.setEmail(user.getPerson().getEmail());
-                personDto.setPhone(user.getPerson().getPhone());
-                personDto.setAddress(user.getPerson().getAddress());
-                personDto.setCity(user.getPerson().getCity());
-                personDto.setDni(user.getPerson().getDni());
+                PersonDTO personDto = new PersonDTO(
+                        user.getPerson().getId(),
+                        user.getPerson().getFirstName(),
+                        user.getPerson().getLastName(),
+                        user.getPerson().getEmail(),
+                        user.getPerson().getDni(),
+                        user.getPerson().getPhone(),
+                        user.getPerson().getAddress(),
+                        user.getPerson().getCity()
+                );
                 userDto.setPerson(personDto);
                 return userDto;
             }).toList();
