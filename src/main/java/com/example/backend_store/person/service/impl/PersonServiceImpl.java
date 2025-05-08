@@ -1,5 +1,6 @@
 package com.example.backend_store.person.service.impl;
 
+import com.example.backend_store.auth.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,30 @@ import com.example.backend_store.person.service.PersonService;
 
 import jakarta.transaction.Transactional;
 
+import java.util.List;
+
 @Service
 public class PersonServiceImpl implements PersonService {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Override
+    public List<PersonDTO> getPersonAll() {
+        List<Person> persons = personRepository.findAll();
+
+        return persons.stream().map(person -> new PersonDTO(
+                person.getId(),
+                person.getFirstName(),
+                person.getLastName(),
+                person.getEmail(),
+                person.getPhone(),
+                person.getAddress(),
+                person.getCity(),
+                person.getDni()
+        )).toList();
+    }
+
     @Override
     public PersonDTO createPerson(PersonDTO userDto) {
         throw new UnsupportedOperationException("Unimplemented method 'updatePerson'");
@@ -38,32 +58,32 @@ public class PersonServiceImpl implements PersonService {
 
         Person updatePerson = personRepository.save(person);
 
-        PersonDTO personDTO = new PersonDTO();
-        personDTO.setId(updatePerson.getId());
-        personDTO.setFirstName(updatePerson.getFirstName());
-        personDTO.setLastName(updatePerson.getLastName());
-        personDTO.setEmail(updatePerson.getEmail());
-        personDTO.setPhone(updatePerson.getPhone());
-        personDTO.setAddress(updatePerson.getAddress());
-        personDTO.setCity(updatePerson.getCity());
-        personDTO.setDni(updatePerson.getDni());
-        return personDTO;
+        return new PersonDTO(
+                updatePerson.getId(),
+                updatePerson.getFirstName(),
+                updatePerson.getLastName(),
+                updatePerson.getEmail(),
+                updatePerson.getPhone(),
+                updatePerson.getAddress(),
+                updatePerson.getCity(),
+                updatePerson.getDni()
+        );
     }
 
     @Override
     public PersonDTO getPersonById(Long id) {
         Person person = personRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Person not found"));
-        PersonDTO personDTO = new PersonDTO();
-        personDTO.setId(person.getId());
-        personDTO.setFirstName(person.getFirstName());
-        personDTO.setLastName(person.getLastName());
-        personDTO.setEmail(person.getEmail());
-        personDTO.setPhone(person.getPhone());
-        personDTO.setAddress(person.getAddress());
-        personDTO.setCity(person.getCity());
-        personDTO.setDni(person.getDni());
-        return personDTO;
+        return new PersonDTO(
+                person.getId(),
+                person.getFirstName(),
+                person.getLastName(),
+                person.getEmail(),
+                person.getPhone(),
+                person.getAddress(),
+                person.getCity(),
+                person.getDni()
+        );
     }
 
     @Override
