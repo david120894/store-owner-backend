@@ -14,18 +14,30 @@ import com.example.backend_store.auth.dto.ApiResponse;
 import com.example.backend_store.person.dto.PersonDTO;
 import com.example.backend_store.person.service.PersonService;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/person")
-public class PersonController{
+public class PersonController {
     @Autowired
     private PersonService personService;
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<PersonDTO>>> getPersonAll() {
+        List<PersonDTO> persons = personService.getPersonAll();
+        return ResponseEntity.ok(
+                new ApiResponse<>("Persons successfully",
+                        HttpStatus.OK.value(),
+                        persons)
+        );
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<PersonDTO>> getPersonById(@PathVariable Long id) {
         PersonDTO person = personService.getPersonById(id);
         return ResponseEntity.ok(
-                new ApiResponse<>( "Person retrieved successfully",
+                new ApiResponse<>("Person retrieved successfully",
                         HttpStatus.OK.value(),
                         person)
         );
@@ -35,7 +47,7 @@ public class PersonController{
     public ResponseEntity<ApiResponse<PersonDTO>> updatePerson(@PathVariable Long id, @RequestBody PersonDTO person) {
         PersonDTO updatedPerson = personService.updatePerson(id, person);
         return ResponseEntity.ok(
-                new ApiResponse<>( "Person updated successfully",
+                new ApiResponse<>("Person updated successfully",
                         HttpStatus.OK.value(),
                         updatedPerson)
         );

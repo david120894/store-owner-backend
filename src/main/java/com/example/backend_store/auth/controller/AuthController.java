@@ -42,14 +42,23 @@ public class AuthController {
         UserResponseDTO userResponseDTO = new UserResponseDTO();
         userResponseDTO.setId(user.getId());
         userResponseDTO.setUsername(user.getUsername());
-        PersonDTO personDTO = new PersonDTO();
-        personDTO.setId(user.getPerson().getId());
-        personDTO.setFirstName(user.getPerson().getFirstName());
-        personDTO.setLastName(user.getPerson().getLastName());
-        personDTO.setEmail(user.getPerson().getEmail());
-        personDTO.setPhone(user.getPerson().getPhone());
-        personDTO.setAddress(user.getPerson().getAddress());
-        personDTO.setCity(user.getPerson().getCity());
+        PersonDTO personDTO = new PersonDTO(
+                user.getPerson().getId(),
+                user.getPerson().getFirstName(),
+                user.getPerson().getLastName(),
+                user.getPerson().getEmail(),
+                user.getPerson().getDni(),
+                user.getPerson().getPhone(),
+                user.getPerson().getAddress(),
+                user.getPerson().getCity()
+        );
+//        personDTO.setId(user.getPerson().getId());
+//        personDTO.setFirstName(user.getPerson().getFirstName());
+//        personDTO.setLastName(user.getPerson().getLastName());
+//        personDTO.setEmail(user.getPerson().getEmail());
+//        personDTO.setPhone(user.getPerson().getPhone());
+//        personDTO.setAddress(user.getPerson().getAddress());
+//        personDTO.setCity(user.getPerson().getCity());
         userResponseDTO.setPerson(personDTO);
 
         userResponseDTO.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())

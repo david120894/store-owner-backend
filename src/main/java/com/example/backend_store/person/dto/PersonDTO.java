@@ -1,8 +1,10 @@
 package com.example.backend_store.person.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class PersonDTO {
     private Long id;
     private String firstName;
