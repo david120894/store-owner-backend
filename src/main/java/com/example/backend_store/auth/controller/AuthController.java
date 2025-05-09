@@ -52,17 +52,10 @@ public class AuthController {
                 user.getPerson().getAddress(),
                 user.getPerson().getCity()
         );
-//        personDTO.setId(user.getPerson().getId());
-//        personDTO.setFirstName(user.getPerson().getFirstName());
-//        personDTO.setLastName(user.getPerson().getLastName());
-//        personDTO.setEmail(user.getPerson().getEmail());
-//        personDTO.setPhone(user.getPerson().getPhone());
-//        personDTO.setAddress(user.getPerson().getAddress());
-//        personDTO.setCity(user.getPerson().getCity());
         userResponseDTO.setPerson(personDTO);
 
         userResponseDTO.setRoles(user.getRoles().stream().map(Role::getName).collect(Collectors.toSet())
-);
+        );
         return ResponseEntity.ok(new ApiResponse<>(
                 "User registered successfully",
                 HttpStatus.OK.value(),

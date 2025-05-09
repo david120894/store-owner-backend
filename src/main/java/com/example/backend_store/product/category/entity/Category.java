@@ -1,7 +1,7 @@
 package com.example.backend_store.product.category.entity;
 
 import com.example.backend_store.product.product.entity.Product;
-import com.example.backend_store.product.store.entity.Store;
+import com.example.backend_store.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Data;
 
