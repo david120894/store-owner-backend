@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.example.backend_store.product.category.entity.Category;
+import com.example.backend_store.product.inventory.entity.Inventory;
 import com.example.backend_store.product.presentations.entity.Presentation;
-import com.example.backend_store.product.store.entity.Store;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -34,5 +34,8 @@ public class Product {
     @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category productCategory;
-    
+    @OneToMany(mappedBy = "product",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true)
+    private Set<Inventory> inventories = new HashSet<>();
 }
