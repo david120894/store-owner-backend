@@ -14,21 +14,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class RoleController {
     @Autowired
     private RoleService roleService;
 
     @GetMapping("/roles")
-    public ResponseEntity<List<Role>> getRole() {
+    public ResponseEntity<ApiResponse<List<Role>>> getRole() {
         List<Role> roles = roleService.getAllRoles();
-        return ResponseEntity.ok(roles);
+        return ResponseEntity.ok(
+            new ApiResponse<>( "Roles retrieved successfully",
+                        HttpStatus.OK.value(),
+                        roles)
+        );
     }
 
     @PostMapping("/roles")
-    public ResponseEntity<Role> createRole(@RequestParam String name) {
-        Role rol = roleService.createRole(name);
-        return ResponseEntity.ok(rol);
+    public ResponseEntity<ApiResponse<RolDto>> createRole(@RequestBody RolDto role) {
+        RolDto rol = roleService.createRole(role);
+        return ResponseEntity.ok(
+            new ApiResponse<>( "Role created successfully",
+                        HttpStatus.CREATED.value(),
+                        rol)
+        );
     }
 
     @PutMapping("/roles/{id}")

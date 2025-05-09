@@ -52,10 +52,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorization -> authorization
-                                .requestMatchers("/api/login").permitAll()
-                                .requestMatchers("/api/register").permitAll()
+                                .requestMatchers("/api/v1/login").permitAll()
+                                .requestMatchers("/api/v1/register").permitAll()
                                 .requestMatchers("/api/refresh-token").permitAll()
-                                .requestMatchers("/api/roles").permitAll()
+                                .requestMatchers("/api/v1/roles").hasAnyAuthority("ADMIN")
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/admin").hasAnyAuthority("ADMIN")
