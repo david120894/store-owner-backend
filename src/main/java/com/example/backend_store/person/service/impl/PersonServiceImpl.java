@@ -6,13 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.backend_store.auth.dto.UserResponseDTO;
 import com.example.backend_store.auth.exceptions.BadRequestException;
-import com.example.backend_store.auth.exceptions.ConflictException;
 import com.example.backend_store.person.dto.PersonDTO;
 import com.example.backend_store.person.entity.Person;
 import com.example.backend_store.person.repository.PersonRepository;
 import com.example.backend_store.person.service.PersonService;
 
-import jakarta.transaction.Transactional;
 
 import java.util.List;
 

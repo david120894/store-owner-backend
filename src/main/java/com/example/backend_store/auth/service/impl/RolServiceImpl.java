@@ -20,15 +20,19 @@ public class RolServiceImpl implements RoleService {
 
 
     @Override
-    public Role createRole(String roleName) {
-        if (roleName.isEmpty()) {
+    public RolDto createRole(RolDto  rol) {
+        if (rol.getName().isEmpty()) {
             throw new IllegalArgumentException("Role name cannot be null");
-        } else if (rolRepository.findByName(roleName).isPresent()) {
+        } else if (rolRepository.findByName(rol.getName()).isPresent()) {
             throw new IllegalArgumentException("Role already exists");
         } else {
             Role role = new Role();
-            role.setName(roleName);
-            return rolRepository.save(role);
+            role.setName(rol.getName());        
+            Role roles=rolRepository.save(role);
+            RolDto rolDto = new RolDto();
+            rolDto.setId(roles.getId());
+            rolDto.setName(roles.getName());
+            return rolDto;
         }
     }
 

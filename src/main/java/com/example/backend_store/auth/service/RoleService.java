@@ -6,8 +6,10 @@ import com.example.backend_store.auth.dto.RolDto;
 import com.example.backend_store.auth.entity.Role;
 
 public interface RoleService {
+
     List<Role> getAllRoles();
-    Role createRole(String name);
+
+    RolDto createRole(RolDto rol);
 
     void deleteRole(String name);
 
