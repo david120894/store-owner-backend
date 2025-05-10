@@ -8,9 +8,9 @@ import java.util.Optional;
 
 public interface StoreService {
 
-    List<StoreDto> findAll();
+    List<StoreDto> getAllStore();
     StoreDto create(StoreDto store);
     StoreDto findById(Long id);
-    StoreDto update(StoreDto store);
-    void delete(StoreDto store);
+    StoreDto update(Long id,StoreDto store);
+    StoreDto delete(Long id);
 }

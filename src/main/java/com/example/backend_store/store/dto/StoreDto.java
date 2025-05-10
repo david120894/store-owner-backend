@@ -6,6 +6,7 @@ import com.example.backend_store.store.entity.Store;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -15,6 +16,7 @@ public class StoreDto {
     private String name;
     private String address;
     private String description;
-    private Set<Category> categories;
-    private Set<Inventory> inventories;
+    private LocalDateTime created;
+//    private Set<Category> categories;
+//    private Set<Inventory> inventories;
 }
