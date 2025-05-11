@@ -31,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
                                 element.getStore().getDescription(),
                                 element.getStore().getCreated()
                         )
-                )).toList();
+        )).toList();
     }
 
     @Override
