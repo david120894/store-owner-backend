@@ -1,6 +1,7 @@
 package com.example.backend_store.product.category.service.impl;
 
 import com.example.backend_store.auth.exceptions.ConflictException;
+import com.example.backend_store.auth.exceptions.NotFoundException;
 import com.example.backend_store.product.category.dto.CategoryDto;
 import com.example.backend_store.product.category.entity.Category;
 import com.example.backend_store.product.category.repository.CategoryRepository;
@@ -46,8 +47,8 @@ public class CategoryServiceImpl implements CategoryService {
         Store store = new Store();
         store.setId(categoryDto.getStore().getId());
         store.setName(categoryDto.getStore().getName());
-        store.setDescription(categoryDto.getStore().getDescription());
         store.setAddress(categoryDto.getStore().getAddress());
+        store.setDescription(categoryDto.getStore().getDescription());
         store.setCreated(categoryDto.getStore().getCreated());
         category.setStore(store);
         Category createCategory = this.categoryRepository.save(category);
@@ -74,8 +75,35 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto updateCategory(Long id) {
-        return null;
+    public CategoryDto updateCategory(Long id,CategoryDto categoryDto) {
+        Category category = this.categoryRepository.findById(id).orElseThrow(
+                ()-> new NotFoundException("Category no found")
+        );
+        category.setCategoryName(categoryDto.getCategoryName());
+        category.setCategoryDescription(categoryDto.getCategoryDescription());
+        category.setCreated(categoryDto.getCreated());
+        Store store =  new Store();
+        store.setId(categoryDto.getStore().getId());
+        store.setName(categoryDto.getStore().getName());
+        store.setDescription(categoryDto.getStore().getDescription());
+        store.setAddress(categoryDto.getStore().getAddress());
+        store.setCreated(categoryDto.getStore().getCreated());
+        category.setStore(store);
+        Category responseCategory = this.categoryRepository.save(category);
+        return new CategoryDto(
+                responseCategory.getId(),
+                responseCategory.getCategoryName(),
+                responseCategory.getCategoryDescription(),
+                responseCategory.getCreated(),
+                new StoreDto(
+                        responseCategory.getStore().getId(),
+                        responseCategory.getStore().getName(),
+                        responseCategory.getStore().getAddress(),
+                        responseCategory.getStore().getDescription(),
+                        responseCategory.getStore().getCreated()
+                )
+        );
+
     }
 
     @Override

@@ -36,4 +36,16 @@ public class CategoryController {
                 )
         );
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<CategoryDto>> updateCategory(@PathVariable Long id,@RequestBody CategoryDto categoryDto) {
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "Update category successfully",
+                        HttpStatus.OK.value(),
+                        categoryService.updateCategory(id,categoryDto)
+
+                )
+        );
+    }
 }
