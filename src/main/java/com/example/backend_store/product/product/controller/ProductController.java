@@ -7,10 +7,10 @@ import com.example.backend_store.product.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("api/v1/product")
@@ -25,6 +25,28 @@ public class ProductController {
                         "Create product successfully",
                         HttpStatus.OK.value(),
                         productService.create(productDto)
+                )
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<ProductDto>> update(@PathVariable Long id, @RequestBody ProductDto productDto) {
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "Updated product successfully",
+                        HttpStatus.OK.value(),
+                        this.productService.update(id,productDto)
+                )
+        );
+    }
+
+    @PostMapping("/upload/img/{id}")
+    public ResponseEntity<ApiResponse<String>> uploads(@PathVariable Long id, @RequestParam("image")MultipartFile image) throws IOException {
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "Image created successfully",
+                        HttpStatus.OK.value(),
+                        this.productService.uploadsImg(id,image)
                 )
         );
     }

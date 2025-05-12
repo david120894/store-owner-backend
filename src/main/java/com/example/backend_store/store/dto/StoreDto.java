@@ -17,6 +17,4 @@ public class StoreDto {
     private String address;
     private String description;
     private LocalDateTime created;
-//    private Set<Category> categories;
-//    private Set<Inventory> inventories;
 }

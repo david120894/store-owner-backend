@@ -14,6 +14,13 @@ import com.example.backend_store.store.entity.Store;
 import com.example.backend_store.store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -27,12 +34,13 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto create(ProductDto productDto) {
         if (this.productRepository.existsByName(productDto.getName())){
-            throw new ConflictException("Product with name" +productDto.getName()+ "already exist");
+            throw new ConflictException("Product with name " +productDto.getName()+ " already exist");
         }
         Product product = new Product();
         product.setName(productDto.getName());
         product.setCode(productDto.getCode());
         product.setCreated(productDto.getCreated());
+        product.setImageUrl("/images/default-product.png");
         Category category = this.categoryRepository.findById(productDto.getCategoryDto().getId()).orElseThrow(
                 () -> new NotFoundException("Category not found")
         );
@@ -67,7 +75,60 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto update(Long id, ProductDto productDto) {
-        return null;
+        Product product =  this.productRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Product with name " +productDto.getName()+ "no found")
+        );
+        product.setName(productDto.getName());
+        product.setCode(productDto.getCode());
+        Category category = this.categoryRepository.findById(productDto.getCategoryDto().getId()).orElseThrow(
+                ()-> new NotFoundException("Category no found")
+        );
+        product.setProductCategory(category);
+        Product product1 = this.productRepository.save(product);
+
+        Category category1 = this.categoryRepository.findById(product1.getProductCategory().getId()).orElseThrow(
+                () -> new NotFoundException("Category no found")
+        );
+        Store store = this.storeRepository.findById(category1.getStore().getId()).orElseThrow(
+                ()-> new NotFoundException("Store no found")
+        );
+
+        return new ProductDto(
+                product1.getId(),
+                product1.getName(),
+                product1.getCode(),
+                product1.getCreated(),
+                new CategoryDto(
+                        category1.getId(),
+                        category1.getCategoryName(),
+                        category1.getCategoryDescription(),
+                        category1.getCreated(),
+                        new StoreDto(
+                                store.getId(),
+                                store.getName(),
+                                store.getAddress(),
+                                store.getDescription(),
+                                store.getCreated()
+                        )
+                )
+
+        );
+
+    }
+
+    @Override
+    public String uploadsImg(Long id, MultipartFile name) throws IOException {
+        String fileName = UUID.randomUUID().toString() + "-" + name.getOriginalFilename();
+        Path imagePath = Paths.get("uploads/" + fileName);
+        Files.copy(name.getInputStream(), imagePath);
+
+        String imageUrl = "/images/" + fileName;
+        Product product = this.productRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Product not found")
+        );
+        product.setImageUrl(imageUrl);
+        Product product1 = this.productRepository.save(product);
+        return product1.getImageUrl();
     }
 
     @Override

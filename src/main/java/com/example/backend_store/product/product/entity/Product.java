@@ -21,6 +21,7 @@ public class Product {
     private Long id;
     private String name;
     private String code;
+    private String imageUrl;
     private Boolean deleted=false;
     @CreationTimestamp
     @Column(updatable = false)
@@ -32,8 +33,4 @@ public class Product {
     @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category productCategory;
-    @OneToMany(mappedBy = "product",
-    cascade = CascadeType.ALL,
-    orphanRemoval = true)
-    private Set<Inventory> inventories = new HashSet<>();
 }
