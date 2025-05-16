@@ -8,6 +8,7 @@ import com.example.backend_store.product.category.repository.CategoryRepository;
 import com.example.backend_store.product.category.service.CategoryService;
 import com.example.backend_store.store.dto.StoreDto;
 import com.example.backend_store.store.entity.Store;
+import com.example.backend_store.store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private StoreRepository storeRepository;
     @Override
     public List<CategoryDto> getAllCategory() {
         List<Category> category = this.categoryRepository.findByDeletedFalse();
@@ -44,12 +47,9 @@ public class CategoryServiceImpl implements CategoryService {
         category.setCategoryName(categoryDto.getCategoryName());
         category.setCategoryDescription(categoryDto.getCategoryDescription());
         category.setCreated(categoryDto.getCreated());
-        Store store = new Store();
-        store.setId(categoryDto.getStore().getId());
-        store.setName(categoryDto.getStore().getName());
-        store.setAddress(categoryDto.getStore().getAddress());
-        store.setDescription(categoryDto.getStore().getDescription());
-        store.setCreated(categoryDto.getStore().getCreated());
+        Store store = storeRepository.findById(categoryDto.getStore().getId()).orElseThrow(
+                () -> new NotFoundException("Store no found")
+        );
         category.setStore(store);
         Category createCategory = this.categoryRepository.save(category);
         StoreDto storeDto = new StoreDto(
