@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,6 +31,32 @@ public class ProductServiceImpl implements ProductService {
     private StoreRepository storeRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Override
+    public List<ProductDto> getAllProduct() {
+        List<Product> products = this.productRepository.findByDeletedFalse();
+        return products.stream().map(element -> new ProductDto(
+                        element.getId(),
+                        element.getName(),
+                        element.getCode(),
+                        element.getImageUrl(),
+                        element.getCreated(),
+                        new CategoryDto(
+                                element.getProductCategory().getId(),
+                                element.getProductCategory().getCategoryName(),
+                                element.getProductCategory().getCategoryDescription(),
+                                element.getProductCategory().getCreated(),
+                                new StoreDto(
+                                        element.getProductCategory().getStore().getId(),
+                                        element.getProductCategory().getStore().getName(),
+                                        element.getProductCategory().getStore().getAddress(),
+                                        element.getProductCategory().getStore().getDescription(),
+                                        element.getProductCategory().getStore().getPhone(),
+                                        element.getProductCategory().getStore().getCreated()
+                                )
+                        )
+                )).toList();
+    }
 
     @Override
     public ProductDto create(ProductDto productDto) {
@@ -54,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
                 response.getId(),
                 response.getName(),
                 response.getCode(),
+                response.getImageUrl(),
                 response.getCreated(),
                 new CategoryDto(
                         response.getProductCategory().getId(),
@@ -65,6 +93,7 @@ public class ProductServiceImpl implements ProductService {
                                 response.getProductCategory().getStore().getName(),
                                 response.getProductCategory().getStore().getAddress(),
                                 response.getProductCategory().getStore().getDescription(),
+                                response.getProductCategory().getStore().getPhone(),
                                 response.getProductCategory().getStore().getCreated()
                         )
 
@@ -97,6 +126,7 @@ public class ProductServiceImpl implements ProductService {
                 product1.getId(),
                 product1.getName(),
                 product1.getCode(),
+                product1.getImageUrl(),
                 product1.getCreated(),
                 new CategoryDto(
                         category1.getId(),
@@ -108,6 +138,7 @@ public class ProductServiceImpl implements ProductService {
                                 store.getName(),
                                 store.getAddress(),
                                 store.getDescription(),
+                                store.getPhone(),
                                 store.getCreated()
                         )
                 )
@@ -133,6 +164,33 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto delete(Long id) {
-        return null;
+        Product product = this.productRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Product not found")
+        );
+        product.setDeleted(true);
+        Product deletedProduct = this.productRepository.save(product);
+        Category category = deletedProduct.getProductCategory();
+        Store store = category.getStore();
+        return new ProductDto(
+                deletedProduct.getId(),
+                deletedProduct.getName(),
+                deletedProduct.getCode(),
+                deletedProduct.getImageUrl(),
+                deletedProduct.getCreated(),
+                new CategoryDto(
+                        category.getId(),
+                        category.getCategoryName(),
+                        category.getCategoryDescription(),
+                        category.getCreated(),
+                        new StoreDto(
+                                store.getId(),
+                                store.getName(),
+                                store.getAddress(),
+                                store.getDescription(),
+                                store.getPhone(),
+                                store.getCreated()
+                        )
+                )
+        );
     }
 }

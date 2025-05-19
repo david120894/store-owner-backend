@@ -64,6 +64,7 @@ public class PresentationServiceImpl implements PresentationService {
                         product.getId(),
                         product.getName(),
                         product.getCode(),
+                        product.getImageUrl(),
                         product.getCreated(),
                         new CategoryDto(
                                 category.getId(),
@@ -75,6 +76,7 @@ public class PresentationServiceImpl implements PresentationService {
                                         store.getName(),
                                         store.getAddress(),
                                         store.getDescription(),
+                                        store.getPhone(),
                                         store.getCreated()
                                 )
                         )

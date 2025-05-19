@@ -33,6 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
                                 element.getStore().getName(),
                                 element.getStore().getAddress(),
                                 element.getStore().getDescription(),
+                                element.getStore().getPhone(),
                                 element.getStore().getCreated()
                         )
         )).toList();
@@ -57,7 +58,9 @@ public class CategoryServiceImpl implements CategoryService {
                 createCategory.getStore().getName(),
                 createCategory.getStore().getAddress(),
                 createCategory.getStore().getDescription(),
+                createCategory.getStore().getPhone(),
                 createCategory.getStore().getCreated()
+
         );
         return new CategoryDto(
                 createCategory.getId(),
@@ -100,6 +103,7 @@ public class CategoryServiceImpl implements CategoryService {
                         responseCategory.getStore().getName(),
                         responseCategory.getStore().getAddress(),
                         responseCategory.getStore().getDescription(),
+                        responseCategory.getStore().getPhone(),
                         responseCategory.getStore().getCreated()
                 )
         );
@@ -109,5 +113,24 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto delete(Long id) {
         return null;
+    }
+
+    @Override
+    public List<CategoryDto> getCategoryByStoreId(Long storeId) {
+        List<Category> categories = this.categoryRepository.findCategoryByStoreId(storeId);
+        return categories.stream().map(element -> new CategoryDto(
+                        element.getId(),
+                        element.getCategoryName(),
+                        element.getCategoryDescription(),
+                        element.getCreated(),
+                        new StoreDto(
+                                element.getStore().getId(),
+                                element.getStore().getName(),
+                                element.getStore().getAddress(),
+                                element.getStore().getDescription(),
+                                element.getStore().getPhone(),
+                                element.getStore().getCreated()
+                        )
+        )).toList();
     }
 }

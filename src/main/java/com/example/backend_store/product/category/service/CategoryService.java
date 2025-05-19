@@ -10,5 +10,6 @@ public interface CategoryService {
     CategoryDto getCategoryById(Long id);
     CategoryDto updateCategory(Long id, CategoryDto categoryDto);
     CategoryDto delete(Long id);
+    List<CategoryDto> getCategoryByStoreId(Long storeId);
 
 }

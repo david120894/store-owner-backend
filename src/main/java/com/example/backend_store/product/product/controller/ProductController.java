@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/product")
@@ -18,6 +20,16 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<ProductDto>>> getAllProduct() {
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "List product successfully",
+                        HttpStatus.OK.value(),
+                        productService.getAllProduct()
+                )
+        );
+    }
     @PostMapping
     public ResponseEntity<ApiResponse<ProductDto>> create(@RequestBody ProductDto productDto) {
         return ResponseEntity.ok(
@@ -41,12 +53,22 @@ public class ProductController {
     }
 
     @PostMapping("/upload/img/{id}")
-    public ResponseEntity<ApiResponse<String>> uploads(@PathVariable Long id, @RequestParam("image")MultipartFile image) throws IOException {
+    public ResponseEntity<ApiResponse<String>> uploads(@PathVariable Long id, @RequestParam("file")MultipartFile image) throws IOException {
         return ResponseEntity.ok(
                 new ApiResponse<>(
                         "Image created successfully",
                         HttpStatus.OK.value(),
                         this.productService.uploadsImg(id,image)
+                )
+        );
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<ProductDto>> delete(@PathVariable Long id) {
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "Deleted product successfully",
+                        HttpStatus.OK.value(),
+                        this.productService.delete(id)
                 )
         );
     }

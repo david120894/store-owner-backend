@@ -26,6 +26,17 @@ public class CategoryController {
                 )
         );
     }
+
+    @GetMapping("/{idStore}")
+    public ResponseEntity<ApiResponse<List<CategoryDto>>> getCategoryByStore(@PathVariable Long idStore) {
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        "Category successfully",
+                        HttpStatus.OK.value(),
+                        categoryService.getCategoryByStoreId(idStore)
+                )
+        );
+    }
     @PostMapping
     public ResponseEntity<ApiResponse<CategoryDto>> createCategory(@RequestBody CategoryDto categoryDto) {
         return ResponseEntity.ok(
