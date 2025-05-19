@@ -26,6 +26,7 @@ public class StoreServiceImpl implements StoreService {
                 element.getName(),
                 element.getAddress(),
                 element.getDescription(),
+                element.getPhone(),
                 element.getCreated()
         )).toList();
     }
@@ -40,12 +41,14 @@ public class StoreServiceImpl implements StoreService {
         store1.setName(store.getName());
         store1.setDescription(store.getDescription());
         store1.setAddress(store.getAddress());
+        store1.setPhone(store.getPhone());
         Store response = this.storeRepository.save(store1);
         return new StoreDto(
                 response.getId(),
                 response.getName(),
                 response.getAddress(),
                 response.getDescription(),
+                response.getPhone(),
                 response.getCreated());
     }
 
@@ -59,19 +62,18 @@ public class StoreServiceImpl implements StoreService {
                 store.getName(),
                 store.getAddress(),
                 store.getDescription(),
+                store.getPhone(),
                 store.getCreated()
         );
     }
 
     @Override
     public StoreDto update(Long id,StoreDto store) {
-        if (this.storeRepository.existsByName(store.getName())) {
-            throw  new ConflictException("Store already exist");
-        }
         Store store1 = this.storeRepository.findById(id)
                 .orElseThrow(()->new NotFoundException("Store with " +id+ "not found"));
         store1.setName(store.getName());
         store1.setDescription(store.getDescription());
+        store1.setPhone(store.getPhone());
         store1.setAddress(store.getAddress());
         Store store2 = this.storeRepository.save(store1);
 
@@ -80,6 +82,7 @@ public class StoreServiceImpl implements StoreService {
                 store2.getName(),
                 store2.getAddress(),
                 store2.getDescription(),
+                store2.getPhone(),
                 store2.getCreated()
         );
     }
@@ -96,6 +99,7 @@ public class StoreServiceImpl implements StoreService {
                 deletedStore.getName(),
                 deletedStore.getAddress(),
                 deletedStore.getDescription(),
+                deletedStore.getPhone(),
                 deletedStore.getCreated()
         );
     }
