@@ -39,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
                         element.getId(),
                         element.getName(),
                         element.getCode(),
+                        element.getDescription(),
                         element.getImageUrl(),
                         element.getCreated(),
                         new CategoryDto(
@@ -81,6 +82,7 @@ public class ProductServiceImpl implements ProductService {
                 response.getId(),
                 response.getName(),
                 response.getCode(),
+                response.getDescription(),
                 response.getImageUrl(),
                 response.getCreated(),
                 new CategoryDto(
@@ -126,6 +128,7 @@ public class ProductServiceImpl implements ProductService {
                 product1.getId(),
                 product1.getName(),
                 product1.getCode(),
+                product1.getDescription(),
                 product1.getImageUrl(),
                 product1.getCreated(),
                 new CategoryDto(
@@ -175,6 +178,7 @@ public class ProductServiceImpl implements ProductService {
                 deletedProduct.getId(),
                 deletedProduct.getName(),
                 deletedProduct.getCode(),
+                deletedProduct.getDescription(),
                 deletedProduct.getImageUrl(),
                 deletedProduct.getCreated(),
                 new CategoryDto(

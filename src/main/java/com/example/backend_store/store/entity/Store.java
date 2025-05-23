@@ -29,7 +29,8 @@ public class Store {
     @Column(updatable = false)
     private LocalDateTime created;
     @OneToMany(mappedBy = "store",
-    cascade = CascadeType.ALL)
+    cascade = CascadeType.ALL,
+    orphanRemoval = true)
     private Set<Category> categories = new HashSet<>();
     @OneToMany(mappedBy = "store",
     cascade = CascadeType.ALL,

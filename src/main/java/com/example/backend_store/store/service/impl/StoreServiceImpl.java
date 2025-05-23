@@ -37,7 +37,6 @@ public class StoreServiceImpl implements StoreService {
             throw new ConflictException("Store with name " + store.getName() + " already exists");
         }
         Store store1 = new Store();
-        store1.setId(store.getId());
         store1.setName(store.getName());
         store1.setDescription(store.getDescription());
         store1.setAddress(store.getAddress());
