@@ -64,6 +64,7 @@ public class PresentationServiceImpl implements PresentationService {
                         product.getId(),
                         product.getName(),
                         product.getCode(),
+                        product.getDescription(),
                         product.getImageUrl(),
                         product.getCreated(),
                         new CategoryDto(

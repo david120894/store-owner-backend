@@ -12,6 +12,7 @@ public class ProductDto {
     private Long id;
     private String name;
     private String code;
+    private String description;
     private String imageUrl;
     private LocalDateTime created;
     private CategoryDto categoryDto;

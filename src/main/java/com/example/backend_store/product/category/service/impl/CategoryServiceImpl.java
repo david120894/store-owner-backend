@@ -41,17 +41,20 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
-        if (categoryRepository.existsByCategoryName(categoryDto.getCategoryName())) {
-            throw new ConflictException("Category with name " +categoryDto.getCategoryName()+" already exist");
+        Long storeId = categoryDto.getStore().getId();
+        Store store = this.storeRepository.findById(storeId)
+                .orElseThrow(() -> new NotFoundException("Store no found"));
+
+        if (categoryRepository.existsByCategoryNameAndStoreId(categoryDto.getCategoryName(), storeId)) {
+            throw new ConflictException("Category with name " + categoryDto.getCategoryName() + " already exists in this store");
         }
+
         Category category = new Category();
         category.setCategoryName(categoryDto.getCategoryName());
         category.setCategoryDescription(categoryDto.getCategoryDescription());
         category.setCreated(categoryDto.getCreated());
-        Store store = storeRepository.findById(categoryDto.getStore().getId()).orElseThrow(
-                () -> new NotFoundException("Store no found")
-        );
         category.setStore(store);
+
         Category createCategory = this.categoryRepository.save(category);
         StoreDto storeDto = new StoreDto(
                 createCategory.getStore().getId(),
@@ -60,7 +63,6 @@ public class CategoryServiceImpl implements CategoryService {
                 createCategory.getStore().getDescription(),
                 createCategory.getStore().getPhone(),
                 createCategory.getStore().getCreated()
-
         );
         return new CategoryDto(
                 createCategory.getId(),
@@ -69,7 +71,6 @@ public class CategoryServiceImpl implements CategoryService {
                 createCategory.getCreated(),
                 storeDto
         );
-
     }
 
     @Override
